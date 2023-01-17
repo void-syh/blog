@@ -44,7 +44,9 @@ branch换成对应的branch
 ![image](https://user-images.githubusercontent.com/50072042/212849035-2b304afb-6c89-49be-82cc-583a43fa78f3.png)
 说一个我遇到的问题，在一开始的时候，我发现脚本执行了，但是没有push成功，查看日志后发现报错了permission denied，才发现是写权限没开
 ![image](https://user-images.githubusercontent.com/50072042/212849099-8d6f3396-cbe5-42bb-ae1b-a8bc81409737.png)
-## 参考链接
-脚本原作者：[https://github.com/yihong0618](https://github.com/yihong0618)
+## 参考
+脚本原作者：
+[https://github.com/yihong0618](https://github.com/yihong0618)
+其余参考链接：
 [https://github.com/yihong0618/gitblog/issues/177](https://github.com/yihong0618/gitblog/issues/177)
 [https://zhuanlan.zhihu.com/p/400962805](https://zhuanlan.zhihu.com/p/400962805)

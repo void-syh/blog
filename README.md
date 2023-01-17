@@ -6,5 +6,7 @@ My personal blog using issues and GitHub Actions (随意转载，无需署名)
  | ---- | ---- | ---- |
 ## 最近更新
 - [基于github issues记录博客](https://github.com/void-syh/blog/issues/1)--2023-01-17
+## 2023
+- [基于github issues记录博客](https://github.com/void-syh/blog/issues/1)--2023-01-17
 ## 踩坑
 - [基于github issues记录博客](https://github.com/void-syh/blog/issues/1)--2023-01-17
