@@ -16,4 +16,7 @@ issue记录有几个好处
 # 搭建过程
 ## 下载或fork
 链接：[https://github.com/yihong0618/gitblog](https://github.com/yihong0618/gitblog)
+首先打开这个仓库，可以download，也可以直接fork
+![image](https://user-images.githubusercontent.com/50072042/212846323-e917d5af-85dd-423d-ade8-d99327673bb3.png)
+
 
