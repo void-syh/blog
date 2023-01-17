@@ -13,3 +13,7 @@ issue记录有几个好处
 
 综上，如果你像我一样“懒”，不妨试着先用git issue记录起自己的成长和进步。
 
+# 搭建过程
+## 下载或fork
+链接：[https://github.com/yihong0618/gitblog](https://github.com/yihong0618/gitblog)
+
