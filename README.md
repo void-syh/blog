@@ -9,9 +9,12 @@ My personal blog using issues and GitHub Actions (随意转载，无需署名)
 - [性能优化总结](https://github.com/void-syh/blog/issues/2)--2023-01-31
 - [基于github issues记录博客](https://github.com/void-syh/blog/issues/1)--2023-01-17
 ## 2022
+- [从一个bug 深入剖析 多节点情况时的React diff算法](https://github.com/void-syh/blog/issues/3)--2023-02-10
 - [性能优化总结](https://github.com/void-syh/blog/issues/2)--2023-01-31
 ## 2023
 - [基于github issues记录博客](https://github.com/void-syh/blog/issues/1)--2023-01-17
+## React
+- [从一个bug 深入剖析 多节点情况时的React diff算法](https://github.com/void-syh/blog/issues/3)--2023-02-10
 ## 性能
 - [性能优化总结](https://github.com/void-syh/blog/issues/2)--2023-01-31
 ## 踩坑

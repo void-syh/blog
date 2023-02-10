@@ -262,10 +262,125 @@ function updateSlot(
 ```
 第一次遍历完后新节点idx等于长度
 ```
+if (newIdx === newChildren.length) {
+      // 新节点遍历完成，说明新节点全部都可以复用老节点，将剩余的老节点全部删掉即可
+      deleteRemainingChildren(returnFiber, oldFiber);
+      ...
+      return resultingFirstChild;
+    }
 ```
 第一次遍历完后旧节点为null
-
+```
+if (oldFiber === null) {
+      // 老节点遍历完成，说明老节点已经全部复用完了，剩下的新节点直接创建
+      for (; newIdx < newChildren.length; newIdx++) {
+        //创建节点
+        const newFiber = createChild(returnFiber, newChildren[newIdx], lanes);
+        if (newFiber === null) {
+          continue;
+        }
+        lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIdx);
+        // 链表连起来
+        if (previousNewFiber === null) {
+          resultingFirstChild = newFiber;
+        } else {
+          previousNewFiber.sibling = newFiber;
+        }
+        previousNewFiber = newFiber;
+      }
+      ...
+      return resultingFirstChild;
+    }
+```
 生成旧节点的Map
-
+```
+const existingChildren = mapRemainingChildren(returnFiber, oldFiber);
+ 
+function mapRemainingChildren(
+    returnFiber: Fiber,
+    currentFirstChild: Fiber,
+  ): Map<string | number, Fiber> {
+    // 将剩余的未复用的旧节点生成map结构，方便查找
+    const existingChildren: Map<string | number, Fiber> = new Map();
+ 
+    let existingChild = currentFirstChild;
+    // 存储都是用set结构，所以同key值的会被覆盖
+    while (existingChild !== null) {
+      if (existingChild.key !== null) {
+        // 有key存key
+        existingChildren.set(existingChild.key, existingChild);
+      } else {
+        //无key存index
+        existingChildren.set(existingChild.index, existingChild);
+      }
+      existingChild = existingChild.sibling;
+    }
+    return existingChildren;
+  }
+```
 第二次遍历
+```
+for (; newIdx < newChildren.length; newIdx++) {
+  // 从map中找，看看有没有能复用的
+  const newFiber = updateFromMap(
+    existingChildren,
+    returnFiber,
+    newIdx,
+    newChildren[newIdx],
+    lanes,
+  );
+  // 如果从map里复用了，就要把map里已经复用的旧节点给删了
+  if (newFiber !== null) {
+    if (shouldTrackSideEffects) {
+      if (newFiber.alternate !== null) {
+        existingChildren.delete(
+          newFiber.key === null ? newIdx : newFiber.key,
+        );
+      }
+    }
+    lastPlacedIndex = placeChild(newFiber, lastPlacedIndex, newIdx);
+    // 链表连起来
+    if (previousNewFiber === null) {
+      resultingFirstChild = newFiber;
+    } else {
+      previousNewFiber.sibling = newFiber;
+    }
+    previousNewFiber = newFiber;
+  }
+}
+```
+```
+function placeChild(
+    newFiber: Fiber,
+    lastPlacedIndex: number,
+    newIndex: number,
+  ): number {
+    newFiber.index = newIndex;
+    ...
+    const current = newFiber.alternate;
+    if (current !== null) {
+      const oldIndex = current.index;
+      if (oldIndex < lastPlacedIndex) {
+        // 移动
+        newFiber.flags |= Placement;
+        return lastPlacedIndex;
+      } else {
+        // 不动
+        return oldIndex;
+      }
+    } else {
+      // 插入
+      newFiber.flags |= Placement;
+      return lastPlacedIndex;
+    }
+  }
+```
+### 总结多节点diff的大致流程
+整个多节点diff的大致流程如下：
 
+- 新老遍历对比，能复用老节点就复用老节点（例如只在末尾添加，或只是删除了一个末尾的节点时，前面所有的节点都会进入此循环直接复用掉）当遇到不能复用的节点，退出第一次循环。
+- 如果第一次循环结束后，新节点遍历完了说明新节点都可以复用老节点，而老节点还没遍历完，说明剩下的老节点都是不要的，直接删掉。
+- 如果老节点遍历完了，说明老节点已经都被复用了，剩下的没遍历完的新节点直接创建即可。
+- 新老都没遍历完，说明节点的位置被改变，或者有节点不能直接复用等，为了方便后续操作，将节点的链表根据key或index转换为Map。
+- 遍历新节点，直接去老节点的Map中找，找到了就复用，并将老节点从map中删掉，找不到就创建新的
+- 最后删除所有Map中剩余的老节点
